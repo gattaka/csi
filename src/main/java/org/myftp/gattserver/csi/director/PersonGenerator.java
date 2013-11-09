@@ -11,7 +11,10 @@ import org.myftp.gattserver.csi.world.Person;
 
 public class PersonGenerator {
 
-	public static Person generatePerson() {
+	private static final int MAX_AGE = 90;
+	private static final int MIN_AGE = 15;
+
+	public Person generatePerson() {
 
 		Random random = new Random();
 
@@ -21,7 +24,7 @@ public class PersonGenerator {
 
 		Calendar calendar = Calendar.getInstance();
 		int year = Calendar.getInstance().get(Calendar.YEAR)
-				- random.nextInt(100) - 1;
+				- random.nextInt(MAX_AGE - MIN_AGE) - MIN_AGE;
 		calendar.set(year, random.nextInt(12) + 1, random.nextInt(28) + 1);
 		person.setBirthDate(calendar.getTime());
 

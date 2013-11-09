@@ -9,7 +9,8 @@ public class PersonTest {
 	@Test
 	public void test() {
 
-		Person person = PersonGenerator.generatePerson();
+		PersonGenerator generator = new PersonGenerator();
+		Person person = generator.generatePerson();
 		System.out.println(person.toString());
 		assertTrue(person != null);
 

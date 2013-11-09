@@ -1,9 +1,14 @@
 package org.myftp.gattserver.csi.world;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Months;
+import org.joda.time.Years;
 import org.myftp.gattserver.csi.palette.Address;
 import org.myftp.gattserver.csi.palette.FirstName;
 import org.myftp.gattserver.csi.palette.SureName;
@@ -93,12 +98,21 @@ public class Person {
 		this.fingerprint = fingerprint;
 	}
 
+	public double getAge() {
+		LocalDate date = LocalDate.now();
+		LocalDate birthDate = LocalDate.fromDateFields(this.birthDate);
+		double age = Months.monthsBetween(birthDate, date).getMonths() / 12.0;
+		return age;
+	}
+
 	@Override
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy");
+		NumberFormat numberFormat = new DecimalFormat("###.##");
 		return "I am " + firstName + " " + sureName + " from " + address + " ("
 				+ (male ? "male" : "female") + "), born on "
-				+ dateFormat.format(birthDate) + " - my fingerprint is "
+				+ dateFormat.format(birthDate) + " (age "
+				+ numberFormat.format(getAge()) + ") - my fingerprint is "
 				+ fingerprint;
 	}
 
