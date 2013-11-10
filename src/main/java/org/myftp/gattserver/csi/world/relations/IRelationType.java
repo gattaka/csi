@@ -5,7 +5,7 @@ import org.myftp.gattserver.csi.world.Person;
 
 public interface IRelationType {
 
-	public void apply(Person holdingPerson, Person targetPerson);
+	public boolean applyRelation(Person holdingPerson, Person targetPerson);
 
 	public String getName();
 

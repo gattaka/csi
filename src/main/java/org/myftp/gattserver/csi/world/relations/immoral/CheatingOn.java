@@ -12,10 +12,12 @@ public class CheatingOn extends AbstractImmoralRelationType {
 		super("Cheating on");
 	}
 
-	public void apply(Person holdingPerson, Person targetPerson) {
+	public boolean apply(Person holdingPerson, Person targetPerson) {
 		Relation relation = new Relation(holdingPerson, targetPerson, this);
 		holdingPerson.getKnowledge().getRelations().add(relation);
 		targetPerson.getKnowledge().getRelations().add(relation);
+		
+		return true;
 	}
 
 }

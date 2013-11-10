@@ -23,14 +23,15 @@ public class WorldGenerator {
 	@Autowired
 	private RelationGenerator relationGenerator;
 
+	@Autowired
+	private Statistics statistics;
+
 	private static Logger logger = LoggerFactory
 			.getLogger(WorldGenerator.class);
 
 	public Knowledge generateWorldKnowledge() {
 
 		Knowledge knowledge = new Knowledge();
-		Statistics statistics = Statistics.INSTANCE;
-
 		Random random = new Random();
 
 		// I. vygeneruj postavy
@@ -46,6 +47,8 @@ public class WorldGenerator {
 		}
 
 		// II. vygeneruj vztahy
+		// TODO možná generovat opaènì a každému vztahu-typu dát P ve smyslu
+		// poèet takových vztahù na 100 lidí
 		for (Person holdingPerson : persons) {
 			for (Person targetPerson : persons)
 				relationGenerator.generateRelation(holdingPerson, targetPerson);

@@ -11,8 +11,9 @@ public class Daughter extends AbstractMoralRelationType {
 		super("Daughter");
 	}
 
-	public void apply(Person holdingPerson, Person targetPerson) {
+	public boolean apply(Person holdingPerson, Person targetPerson) {
 		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

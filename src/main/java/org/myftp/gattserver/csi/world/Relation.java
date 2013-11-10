@@ -28,4 +28,30 @@ public class Relation {
 		return targetPerson;
 	}
 
+	@Override
+	public int hashCode() {
+		int result = 19;
+		result = 17 * result + type.hashCode();
+		result = 17 * result + holdingPerson.getFingerprint();
+		result = 17 * result + targetPerson.getFingerprint();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Relation) {
+			Relation rel = (Relation) obj;
+			if (rel.getType().equals(type) == false)
+				return false;
+			if (rel.getHoldingPerson().getFingerprint() != holdingPerson
+					.getFingerprint())
+				return false;
+			if (rel.getTargetPerson().getFingerprint() != targetPerson
+					.getFingerprint())
+				return false;
+			return true;
+		}
+		return false;
+	}
+
 }

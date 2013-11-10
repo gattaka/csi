@@ -11,11 +11,16 @@ import javax.annotation.PostConstruct;
 import org.myftp.gattserver.csi.world.Immorality;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.relations.IRelationType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RelationGenerator {
+
+	private static Logger logger = LoggerFactory
+			.getLogger(RelationGenerator.class);
 
 	private Map<Immorality, List<IRelationType>> relationsPalette = new HashMap<Immorality, List<IRelationType>>();
 
@@ -55,7 +60,13 @@ public class RelationGenerator {
 		IRelationType relationType = relationTypes.get(random
 				.nextInt(relationTypes.size()));
 
-		relationType.apply(holdingPerson, targetPerson);
+		if (relationType.applyRelation(holdingPerson, targetPerson)) {
+			logger.info(holdingPerson.getFirstName() + " "
+					+ holdingPerson.getSureName() + " --> "
+					+ relationType.getName() + " --> "
+					+ targetPerson.getFirstName() + " "
+					+ targetPerson.getSureName());
+		}
 
 	}
 }

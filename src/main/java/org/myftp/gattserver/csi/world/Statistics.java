@@ -1,8 +1,15 @@
 package org.myftp.gattserver.csi.world;
 
-public enum Statistics {
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-	INSTANCE;
+import org.myftp.gattserver.csi.world.relations.IRelationType;
+import org.springframework.stereotype.Service;
+
+@Service
+public class Statistics {
 
 	private int population;
 	private int numberOfMales;
@@ -11,7 +18,18 @@ public enum Statistics {
 	private double minimumAge = Double.MAX_VALUE;
 	private double maximumAge = 0;
 
+	private Map<IRelationType, Set<Relation>> relationsByType = new HashMap<IRelationType, Set<Relation>>();
+
 	private double sumOfAges;
+
+	public void registerRelation(Relation relation) {
+		Set<Relation> relations = relationsByType.get(relation.getType());
+		if (relations == null) {
+			relations = new HashSet<Relation>();
+			relationsByType.put(relation.getType(), relations);
+		}
+		relations.add(relation);
+	}
 
 	public void registerPerson(Person person) {
 		population++;
@@ -33,6 +51,10 @@ public enum Statistics {
 	/**
 	 * Gettery
 	 */
+
+	public Set<Relation> getRelationsByType(IRelationType type) {
+		return relationsByType.get(type);
+	}
 
 	public int getPopulation() {
 		return population;

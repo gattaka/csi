@@ -11,8 +11,9 @@ public class Murder extends AbstractSpecialRelationType {
 		super("Murder");
 	}
 
-	public void apply(Person holdingPerson, Person targetPerson) {
+	public boolean apply(Person holdingPerson, Person targetPerson) {
 		// TODO Auto-generated method stub
+		return true;
 
 	}
 
