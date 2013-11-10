@@ -1,34 +1,31 @@
 package org.myftp.gattserver.csi.world;
 
+import org.myftp.gattserver.csi.world.relations.IRelationType;
+
 public class Relation {
 
-	private String type;
+	private IRelationType type;
 
 	private Person holdingPerson;
 	private Person targetPerson;
 
-	public String getType() {
-		return type;
+	public Relation(Person holdingPerson, Person targetPerson,
+			IRelationType type) {
+		this.holdingPerson = holdingPerson;
+		this.targetPerson = targetPerson;
+		this.type = type;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public IRelationType getType() {
+		return type;
 	}
 
 	public Person getHoldingPerson() {
 		return holdingPerson;
 	}
 
-	public void setHoldingPerson(Person holdingPerson) {
-		this.holdingPerson = holdingPerson;
-	}
-
 	public Person getTargetPerson() {
 		return targetPerson;
-	}
-
-	public void setTargetPerson(Person targetPerson) {
-		this.targetPerson = targetPerson;
 	}
 
 }

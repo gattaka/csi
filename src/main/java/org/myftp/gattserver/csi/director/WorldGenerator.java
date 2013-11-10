@@ -8,10 +8,20 @@ import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class WorldGenerator {
 
 	private static final int MAX_POPULATION = 50;
+	private static final int MIN_POPULATION = 5;
+
+	@Autowired
+	private PersonGenerator personGenerator;
+
+	@Autowired
+	private RelationGenerator relationGenerator;
 
 	private static Logger logger = LoggerFactory
 			.getLogger(WorldGenerator.class);
@@ -24,17 +34,21 @@ public class WorldGenerator {
 		Random random = new Random();
 
 		// I. vygeneruj postavy
-		int population = random.nextInt(MAX_POPULATION) + 1;
+		int population = random.nextInt(MAX_POPULATION - MIN_POPULATION)
+				+ MIN_POPULATION;
 		Set<Person> persons = knowledge.getPersons();
 
-		logger.info("World population: " + population);
-
-		PersonGenerator personGenerator = new PersonGenerator();
 		for (int i = 0; i < population; i++) {
 			Person person = personGenerator.generatePerson();
 			logger.info("New character: " + person.toString());
 			persons.add(person);
 			statistics.registerPerson(person);
+		}
+
+		// II. vygeneruj vztahy
+		for (Person holdingPerson : persons) {
+			for (Person targetPerson : persons)
+				relationGenerator.generateRelation(holdingPerson, targetPerson);
 		}
 
 		return knowledge;

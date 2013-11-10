@@ -8,7 +8,9 @@ import org.myftp.gattserver.csi.palette.FemaleName;
 import org.myftp.gattserver.csi.palette.MaleName;
 import org.myftp.gattserver.csi.palette.SureName;
 import org.myftp.gattserver.csi.world.Person;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PersonGenerator {
 
 	private static final int MAX_AGE = 90;

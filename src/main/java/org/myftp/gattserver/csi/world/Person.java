@@ -4,11 +4,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Set;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Months;
-import org.joda.time.Years;
 import org.myftp.gattserver.csi.palette.Address;
 import org.myftp.gattserver.csi.palette.FirstName;
 import org.myftp.gattserver.csi.palette.SureName;
@@ -23,8 +21,7 @@ public class Person {
 	private boolean male;
 	private int fingerprint;
 
-	private Set<Relation> relations;
-	private Knowledge knowledge;
+	private Knowledge knowledge = new Knowledge();
 
 	public FirstName getFirstName() {
 		return firstName;
@@ -64,14 +61,6 @@ public class Person {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
-	}
-
-	public Set<Relation> getRelations() {
-		return relations;
-	}
-
-	public void setRelations(Set<Relation> relations) {
-		this.relations = relations;
 	}
 
 	public Knowledge getKnowledge() {

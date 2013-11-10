@@ -8,14 +8,20 @@ import org.myftp.gattserver.csi.world.Knowledge;
 import org.myftp.gattserver.csi.world.Statistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Main {
 
 	private static Logger logger = LoggerFactory.getLogger(Main.class);
+	private static ApplicationContext context;
 
 	public static void main(String[] args) {
 
-		WorldGenerator worldGenerator = new WorldGenerator();
+		context = new ClassPathXmlApplicationContext("spring/app-context.xml"); 
+		
+		WorldGenerator worldGenerator = context.getBean(WorldGenerator.class);
+		
 		Knowledge knowledge = worldGenerator.generateWorldKnowledge();
 
 		NumberFormat numberFormat = new DecimalFormat("###.##");
