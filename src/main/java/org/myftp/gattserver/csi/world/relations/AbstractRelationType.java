@@ -1,8 +1,12 @@
 package org.myftp.gattserver.csi.world.relations;
 
 import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
 
 import org.myftp.gattserver.csi.world.Immorality;
+import org.myftp.gattserver.csi.world.Knowledge;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.World;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractRelationType implements IRelationType {
 
 	@Autowired
-	private World world;
+	protected World world;
+	protected Knowledge worldKnowledge;
 
 	private String name;
 	private Immorality immorality = Immorality.MORAL;
+
+	@PostConstruct
+	private void init() {
+		worldKnowledge = world.getKnowledge();
+	}
 
 	public AbstractRelationType(String name, Immorality immorality) {
 		this.name = name;
@@ -22,16 +32,47 @@ public abstract class AbstractRelationType implements IRelationType {
 
 	protected abstract boolean apply(Person holdingPerson, Person targetPerson);
 
+	protected boolean checkRecursivelyBannedRelations(Person holdingPerson,
+			Person targetPerson,
+			IRelationType firstLevelRelations[],
+			IRelationType deepLevelsRelations[],
+			boolean firstLevel) {
+
+		IRelationType bannedRelations[] = firstLevel ? firstLevelRelations
+				: deepLevelsRelations;
+
+		for (IRelationType bannedRelation : bannedRelations) {
+			Set<Person> persons = worldKnowledge
+					.getTargetPersonsByHoldingPersonAndRelation(holdingPerson,
+							bannedRelation);
+			if (persons != null) {
+				if (persons.contains(targetPerson))
+					return false;
+				for (Person p : persons) {
+					if (checkRecursivelyBannedRelations(p, targetPerson,
+							firstLevelRelations, deepLevelsRelations, false) == false)
+						return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 	public boolean applyRelation(Person holdingPerson, Person targetPerson) {
 
 		// test existence daného vztahu
-		Map<Person, Person> relations = world.getKnowledge()
+		Map<Person, Set<Person>> relations = world.getKnowledge()
 				.getRelationsByRelation().get(this);
 		if (relations != null
 				&& relations.get(targetPerson).equals(holdingPerson))
 			return false;
 
-		return apply(holdingPerson, targetPerson);
+		boolean result = apply(holdingPerson, targetPerson);
+		if (result)
+			worldKnowledge.registerRelation(this, holdingPerson,
+					targetPerson);
+		return result;
 	}
 
 	public String getName() {

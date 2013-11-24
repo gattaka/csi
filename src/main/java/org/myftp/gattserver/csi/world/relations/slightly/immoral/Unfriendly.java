@@ -1,7 +1,6 @@
 package org.myftp.gattserver.csi.world.relations.slightly.immoral;
 
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.Relation;
 import org.myftp.gattserver.csi.world.relations.AbstractSlightlyImmoralRelationType;
 import org.springframework.stereotype.Component;
 

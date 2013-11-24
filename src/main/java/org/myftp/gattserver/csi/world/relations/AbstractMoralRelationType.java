@@ -11,4 +11,5 @@ public abstract class AbstractMoralRelationType extends AbstractRelationType {
 	public double getPropability() {
 		return 0.8;
 	}
+	
 }

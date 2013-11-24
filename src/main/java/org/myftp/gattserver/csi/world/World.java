@@ -1,6 +1,5 @@
 package org.myftp.gattserver.csi.world;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,31 +30,7 @@ public class World {
 
 	public void registerRelation(IRelationType relationType,
 			Person holdingPerson, Person targetPerson) {
-		registerRelationByRelation(relationType, holdingPerson, targetPerson);
-		registerRelationByHoldingPerson(relationType, holdingPerson,
-				targetPerson);
-	}
-
-	private void registerRelationByRelation(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<Person, Person> relations = knowledge.getRelationsByRelation().get(
-				relationType);
-		if (relations == null) {
-			relations = new HashMap<Person, Person>();
-			knowledge.getRelationsByRelation().put(relationType, relations);
-		}
-		relations.put(holdingPerson, targetPerson);
-	}
-
-	private void registerRelationByHoldingPerson(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<IRelationType, Person> relations = knowledge.getRelationsByPerson()
-				.get(holdingPerson);
-		if (relations == null) {
-			relations = new HashMap<IRelationType, Person>();
-			knowledge.getRelationsByPerson().put(holdingPerson, relations);
-		}
-		relations.put(relationType, targetPerson);
+		knowledge.registerRelation(relationType, holdingPerson, targetPerson);
 	}
 
 	public void registerPerson(Person person) {
@@ -79,7 +54,7 @@ public class World {
 	 * Gettery
 	 */
 
-	public Map<Person, Person> getPersonsByRelations(IRelationType type) {
+	public Map<Person, Set<Person>> getPersonsByRelations(IRelationType type) {
 		return knowledge.getRelationsByRelation().get(type);
 	}
 
