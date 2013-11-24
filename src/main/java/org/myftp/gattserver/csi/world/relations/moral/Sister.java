@@ -1,11 +1,11 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
+import org.myftp.gattserver.csi.world.relations.AbstractFamilyRelationType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Sister extends AbstractMoralRelationType {
+public class Sister extends AbstractFamilyRelationType {
 
 	public Sister() {
 		super("Sister");

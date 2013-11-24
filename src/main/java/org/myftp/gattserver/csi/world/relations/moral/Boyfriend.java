@@ -1,7 +1,5 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
-import java.util.Set;
-
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
 import org.myftp.gattserver.csi.world.relations.IRelationType;

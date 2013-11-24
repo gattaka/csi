@@ -1,0 +1,7 @@
+==RODINNÉ VZTAHY==
+
+Vzhledem k tomu, že kontrola validnosti rodinných vztahù (bratr, sestra, dìda apod.) vyžadují rekurzivní kontroly pohlaví, 
+jiných vztahù, vìku a pøíjmení, rozhodl jsem se generování tìchto vztahù vyjmout z fáze náhodného generování vztahù
+
+Místo toho se nejprve vygenerují "nevázané" vztahy jako spolužák, manžel, zamìstnanec apod. a na nich se pak nechají vygenerovat 
+rodinné vztahy vèetnì nových osob  

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class WorldGenerator {
 
-	private static final int MAX_POPULATION = 50;
-	private static final int MIN_POPULATION = 5;
+	private static final int MAX_BASE_POPULATION = 50;
+	private static final int MIN_BASE_POPULATION = 5;
 
 	@Autowired
 	private PersonGenerator personGenerator;
@@ -35,9 +35,10 @@ public class WorldGenerator {
 		Knowledge knowledge = new Knowledge();
 		Random random = new Random();
 
-		// I. vygeneruj postavy
-		int population = random.nextInt(MAX_POPULATION - MIN_POPULATION)
-				+ MIN_POPULATION;
+		// I. vygeneruj základní postavy
+		int population = random.nextInt(MAX_BASE_POPULATION
+				- MIN_BASE_POPULATION)
+				+ MIN_BASE_POPULATION;
 		List<Person> persons = new ArrayList<>(knowledge.getPersons());
 
 		for (int i = 0; i < population; i++) {
@@ -48,9 +49,19 @@ public class WorldGenerator {
 		}
 
 		// II. vygeneruj vztahy
+		// TODO - vygenerovat generace, dle nich syny a dcery apod.
+		// for generation : generations {
+		// 1. husband, wife
+		// 2. children, siblings...
+		// }
+		//
 		for (Person holdingPerson : persons) {
 			relationGenerator.generateRelations(holdingPerson, persons);
 		}
+		
+		// TODO - po všech generacích teprve vygenerovat nìjaké nemorální vztahy apod.
+		
+		// TODO - nazávìr vygenerovat tìžké vztahy a vraždu
 
 		return knowledge;
 	}

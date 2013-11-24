@@ -1,7 +1,6 @@
 package org.myftp.gattserver.csi.world.relations.very.immoral;
 
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.Relation;
 import org.myftp.gattserver.csi.world.relations.AbstractVeryImmoralRelationType;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +21,7 @@ public class Rape extends AbstractVeryImmoralRelationType {
 		if (targetPerson.isMale())
 			return false;
 
-		Relation relation = new Relation(holdingPerson, targetPerson, this);
-		holdingPerson.addRelation(relation);
-		holdingPerson.getKnowledge().getRelations().add(relation);
-		targetPerson.getKnowledge().getRelations().add(relation);
+		// TODO
 		return true;
 	}
 

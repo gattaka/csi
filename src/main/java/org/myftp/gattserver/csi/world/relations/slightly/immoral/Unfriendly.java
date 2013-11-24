@@ -12,13 +12,7 @@ public class Unfriendly extends AbstractSlightlyImmoralRelationType {
 	}
 
 	public boolean apply(Person holdingPerson, Person targetPerson) {
-		Relation relation = new Relation(holdingPerson, targetPerson, this);
-		holdingPerson.getKnowledge().getRelations().add(relation);
-		targetPerson.getKnowledge().getRelations().add(relation);
-
-		relation = new Relation(targetPerson, holdingPerson, this);
-		targetPerson.getKnowledge().getRelations().add(relation);
-		holdingPerson.getKnowledge().getRelations().add(relation);
+		// TODO
 		return true;
 	}
 
