@@ -1,32 +1,26 @@
-package org.myftp.gattserver.csi.world.relations.moral;
-
-import java.util.Set;
+package org.myftp.gattserver.csi.world.relations.very.immoral;
 
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.Relation;
-import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
+import org.myftp.gattserver.csi.world.relations.AbstractVeryImmoralRelationType;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Boyfriend extends AbstractMoralRelationType {
+public class Rape extends AbstractVeryImmoralRelationType {
 
-	public Boyfriend() {
-		super("Boyfriend");
+	public Rape() {
+		super("Rape");
 	}
 
 	public boolean apply(Person holdingPerson, Person targetPerson) {
 
-		// Pøítel musí být muž
+		// zatím pomineme extrémní pøípady, že znásilòuje žena :)
 		if (holdingPerson.isMale() == false)
 			return false;
-		
-		// Gayové odpustí - cílová osoba pøítele musí být žena 
+
+		// ... øeknìme, že zatím bereme "klasické" znásilnìní, kde obìtí je žena
 		if (targetPerson.isMale())
 			return false;
-		
-		// Nemùže chodit se svojí sestrou, matkou (ani její matkou nebo sestrou apod.) a nesmí být ženatý
-		Set<Relation> sisterRelations = targetPerson.getRelationsByType().get(new Sister());
-		if () !)
 
 		Relation relation = new Relation(holdingPerson, targetPerson, this);
 		holdingPerson.addRelation(relation);

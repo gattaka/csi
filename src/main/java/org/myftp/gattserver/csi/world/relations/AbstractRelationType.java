@@ -1,10 +1,16 @@
 package org.myftp.gattserver.csi.world.relations;
 
+import java.util.Map;
+
 import org.myftp.gattserver.csi.world.Immorality;
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.Relation;
+import org.myftp.gattserver.csi.world.World;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractRelationType implements IRelationType {
+
+	@Autowired
+	private World world;
 
 	private String name;
 	private Immorality immorality = Immorality.MORAL;
@@ -19,8 +25,10 @@ public abstract class AbstractRelationType implements IRelationType {
 	public boolean applyRelation(Person holdingPerson, Person targetPerson) {
 
 		// test existence daného vztahu
-		Relation testRelation = new Relation(holdingPerson, targetPerson, this);
-		if (holdingPerson.getKnowledge().getRelations().contains(testRelation))
+		Map<Person, Person> relations = world.getKnowledge()
+				.getRelationsByRelation().get(this);
+		if (relations != null
+				&& relations.get(targetPerson).equals(holdingPerson))
 			return false;
 
 		return apply(holdingPerson, targetPerson);

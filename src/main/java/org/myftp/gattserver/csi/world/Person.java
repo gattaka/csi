@@ -19,7 +19,6 @@ public class Person {
 	private Date birthDate;
 	private Address address;
 	private boolean male;
-	private int fingerprint;
 
 	private Knowledge knowledge = new Knowledge();
 
@@ -80,11 +79,7 @@ public class Person {
 	}
 
 	public int getFingerprint() {
-		return fingerprint;
-	}
-
-	public void setFingerprint(int fingerprint) {
-		this.fingerprint = fingerprint;
+		return super.hashCode();
 	}
 
 	public double getAge() {
@@ -95,6 +90,19 @@ public class Person {
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Person) {
+			return ((Person) obj).getFingerprint() == getFingerprint();
+		} else
+			return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getFingerprint();
+	}
+
+	@Override
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy");
 		NumberFormat numberFormat = new DecimalFormat("###.##");
@@ -102,7 +110,7 @@ public class Person {
 				+ (male ? "male" : "female") + "), born on "
 				+ dateFormat.format(birthDate) + " (age "
 				+ numberFormat.format(getAge()) + ") - my fingerprint is "
-				+ fingerprint;
+				+ getFingerprint();
 	}
 
 }

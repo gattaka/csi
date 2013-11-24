@@ -8,4 +8,7 @@ public abstract class AbstractMoralRelationType extends AbstractRelationType {
 		super(name, Immorality.MORAL);
 	}
 
+	public double getPropability() {
+		return 0.8;
+	}
 }

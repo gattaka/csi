@@ -1,19 +1,36 @@
 package org.myftp.gattserver.csi.world;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import org.myftp.gattserver.csi.world.relations.IRelationType;
 
 public class Knowledge {
 
-	private Set<Relation> relations = new HashSet<Relation>();
+	private Map<IRelationType, Map<Person, Person>> relationsByRelation = new HashMap<IRelationType, Map<Person, Person>>();
+	private Map<Person, Map<IRelationType, Person>> relationsByPerson = new HashMap<Person, Map<IRelationType, Person>>();
+
+	// znalost lidí
 	private Set<Person> persons = new HashSet<Person>();
 
-	public Set<Relation> getRelations() {
-		return relations;
+	public Map<IRelationType, Map<Person, Person>> getRelationsByRelation() {
+		return relationsByRelation;
 	}
 
-	public void setRelations(Set<Relation> relations) {
-		this.relations = relations;
+	public void setRelationsByRelation(
+			Map<IRelationType, Map<Person, Person>> relationsByRelation) {
+		this.relationsByRelation = relationsByRelation;
+	}
+
+	public Map<Person, Map<IRelationType, Person>> getRelationsByPerson() {
+		return relationsByPerson;
+	}
+
+	public void setRelationsByPerson(
+			Map<Person, Map<IRelationType, Person>> relationsByPerson) {
+		this.relationsByPerson = relationsByPerson;
 	}
 
 	public Set<Person> getPersons() {

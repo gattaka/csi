@@ -17,4 +17,8 @@ public class Murder extends AbstractSpecialRelationType {
 
 	}
 
+	public double getPropability() {
+		return 0;
+	}
+
 }

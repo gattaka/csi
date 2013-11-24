@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import org.myftp.gattserver.csi.world.Immorality;
 import org.myftp.gattserver.csi.world.Person;
+import org.myftp.gattserver.csi.world.World;
 import org.myftp.gattserver.csi.world.relations.IRelationType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,9 @@ public class RelationGenerator {
 	@Autowired(required = false)
 	private List<IRelationType> iRelationTypes;
 
+	@Autowired
+	private World world;
+
 	@PostConstruct
 	public void init() {
 
@@ -40,32 +44,42 @@ public class RelationGenerator {
 
 	}
 
-	public void generateRelation(Person holdingPerson, Person targetPerson) {
+	/**
+	 * Generuje vztahy iniciované vybranou osobou. Prochází postupnì všechny
+	 * typy vztahù a náhodnì je realizuje na vybrané osobì a náhodnì vybrané
+	 * cílové osobì (pøíjemce vztahu)
+	 * 
+	 * @param holdingPerson
+	 * @param persons
+	 */
+	public void generateRelations(Person holdingPerson, List<Person> persons) {
 
-		Random random = new Random();
-		int hit = random.nextInt(100);
+		List<IRelationType> relationTypes = iRelationTypes;
+		for (IRelationType relationType : relationTypes) {
 
-		Immorality immorality;
-		if (hit < 50) {
-			immorality = Immorality.MORAL;
-		} else if (hit < 80) {
-			immorality = Immorality.SLIGHTLY_IMMORAL;
-		} else if (hit < 95) {
-			immorality = Immorality.IMMORAL;
-		} else {
-			immorality = Immorality.VERY_IMMORAL;
-		}
+			Random random = new Random();
+			double hit = random.nextInt(100) / 100.0;
 
-		List<IRelationType> relationTypes = relationsPalette.get(immorality);
-		IRelationType relationType = relationTypes.get(random
-				.nextInt(relationTypes.size()));
+			// bude vztah realizován dle pravdìpodobnosti vztahu ?
+			if (hit < relationType.getPropability()) {
 
-		if (relationType.applyRelation(holdingPerson, targetPerson)) {
-			logger.info(holdingPerson.getFirstName() + " "
-					+ holdingPerson.getSureName() + " --> "
-					+ relationType.getName() + " --> "
-					+ targetPerson.getFirstName() + " "
-					+ targetPerson.getSureName());
+				// náhodnì vyber cílovou osobu
+				Person targetPerson = null;
+				while (targetPerson == null
+						|| holdingPerson.equals(targetPerson) == true) {
+					targetPerson = persons.get(random.nextInt(persons.size()));
+				}
+
+				if (relationType.applyRelation(holdingPerson, targetPerson)) {
+					logger.info(holdingPerson.getFirstName() + " "
+							+ holdingPerson.getSureName() + " --> "
+							+ relationType.getName() + " --> "
+							+ targetPerson.getFirstName() + " "
+							+ targetPerson.getSureName());
+					world.registerRelation(relationType, holdingPerson,
+							targetPerson);
+				}
+			}
 		}
 
 	}

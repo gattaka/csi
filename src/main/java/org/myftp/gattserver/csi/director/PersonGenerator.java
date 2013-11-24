@@ -40,9 +40,6 @@ public class PersonGenerator {
 
 		person.setSureName(SureName.generateRandom());
 
-		// nakonec
-		person.setFingerprint(person.hashCode());
-
 		return person;
 	}
 
