@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Friend extends AbstractMoralRelationType {
 
 	public Friend() {
-		super("Boyfriend");
+		super("Friend");
 	}
 
 	public boolean apply(Person holdingPerson, Person targetPerson) {

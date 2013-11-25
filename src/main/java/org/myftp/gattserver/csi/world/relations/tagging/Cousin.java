@@ -4,7 +4,16 @@ import org.myftp.gattserver.csi.world.relations.AbstractTaggingRelationType;
 
 public class Cousin extends AbstractTaggingRelationType {
 
-	public Cousin() {
+	private static Cousin INSTANCE = null;
+
+	public static Cousin getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new Cousin();
+		}
+		return INSTANCE;
+	}
+
+	private Cousin() {
 		super("Cousin");
 	}
 

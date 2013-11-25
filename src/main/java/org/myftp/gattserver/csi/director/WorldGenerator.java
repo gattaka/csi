@@ -95,8 +95,6 @@ public class WorldGenerator {
 				world.registerPerson(person);
 			}
 
-			// losování pøirozené smrti (stáøí, nemoc) ?
-
 			// vztahy
 			persons = new ArrayList<>(world.getPersons());
 			for (Person holdingPerson : persons) {

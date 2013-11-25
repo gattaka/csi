@@ -89,15 +89,15 @@ public class RelationGenerator {
 			Random random = new Random();
 			double hit = random.nextInt(100) / 100.0;
 
-			// bude vztah realizován dle pravdìpodobnosti vztahu ?
-			if (hit < relationType.getPropability()) {
+			// náhodnì vyber cílovou osobu
+			Person targetPerson = null;
+			while (targetPerson == null
+					|| holdingPerson.equals(targetPerson) == true) {
+				targetPerson = persons.get(random.nextInt(persons.size()));
+			}
 
-				// náhodnì vyber cílovou osobu
-				Person targetPerson = null;
-				while (targetPerson == null
-						|| holdingPerson.equals(targetPerson) == true) {
-					targetPerson = persons.get(random.nextInt(persons.size()));
-				}
+			// bude vztah na osobách realizován dle pravdìpodobnosti vztahu ?
+			if (hit < relationType.getPropability(holdingPerson, targetPerson)) {
 
 				if (relationType.applyRelation(holdingPerson, targetPerson)) {
 					logger.info(holdingPerson.getFirstName() + " "

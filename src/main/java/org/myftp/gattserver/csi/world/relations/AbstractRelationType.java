@@ -32,33 +32,6 @@ public abstract class AbstractRelationType implements IRelationType {
 
 	protected abstract boolean apply(Person holdingPerson, Person targetPerson);
 
-	protected boolean checkRecursivelyBannedRelations(Person holdingPerson,
-			Person targetPerson,
-			IRelationType firstLevelRelations[],
-			IRelationType deepLevelsRelations[],
-			boolean firstLevel) {
-
-		IRelationType bannedRelations[] = firstLevel ? firstLevelRelations
-				: deepLevelsRelations;
-
-		for (IRelationType bannedRelation : bannedRelations) {
-			Set<Person> persons = worldKnowledge
-					.getTargetPersonsByHoldingPersonAndRelation(holdingPerson,
-							bannedRelation);
-			if (persons != null) {
-				if (persons.contains(targetPerson))
-					return false;
-				for (Person p : persons) {
-					if (checkRecursivelyBannedRelations(p, targetPerson,
-							firstLevelRelations, deepLevelsRelations, false) == false)
-						return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
 	public boolean applyRelation(Person holdingPerson, Person targetPerson) {
 
 		// test existence daného vztahu
@@ -70,8 +43,7 @@ public abstract class AbstractRelationType implements IRelationType {
 
 		boolean result = apply(holdingPerson, targetPerson);
 		if (result)
-			worldKnowledge.registerRelation(this, holdingPerson,
-					targetPerson);
+			worldKnowledge.registerRelation(this, holdingPerson, targetPerson);
 		return result;
 	}
 

@@ -17,7 +17,7 @@ public class Murder extends AbstractSpecialRelationType {
 
 	}
 
-	public double getPropability() {
+	public double getPropability(Person holdingPerson, Person targetPerson) {
 		return 0;
 	}
 

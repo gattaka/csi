@@ -4,7 +4,16 @@ import org.myftp.gattserver.csi.world.relations.AbstractTaggingRelationType;
 
 public class Mother extends AbstractTaggingRelationType {
 
-	public Mother() {
+	private static Mother INSTANCE = null;
+
+	public static Mother getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new Mother();
+		}
+		return INSTANCE;
+	}
+
+	private Mother() {
 		super("Mother");
 	}
 

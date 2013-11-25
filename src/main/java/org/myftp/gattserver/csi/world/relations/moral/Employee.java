@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Employee extends AbstractMoralRelationType {
 
 	public Employee() {
-		super("Boyfriend");
+		super("Employee");
 	}
 
 	public boolean apply(Person holdingPerson, Person targetPerson) {

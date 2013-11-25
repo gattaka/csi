@@ -1,6 +1,7 @@
 package org.myftp.gattserver.csi.world.relations;
 
 import org.myftp.gattserver.csi.world.Immorality;
+import org.myftp.gattserver.csi.world.Person;
 
 public abstract class AbstractMoralRelationType extends AbstractRelationType {
 
@@ -8,7 +9,7 @@ public abstract class AbstractMoralRelationType extends AbstractRelationType {
 		super(name, Immorality.MORAL);
 	}
 
-	public double getPropability() {
+	public double getPropability(Person holdingPerson, Person targetPerson) {
 		return 0.8;
 	}
 	

@@ -1,70 +1,53 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.World;
-import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
-import org.myftp.gattserver.csi.world.relations.IRelationType;
+import org.myftp.gattserver.csi.world.relations.tagging.Aunt;
+import org.myftp.gattserver.csi.world.relations.tagging.Cousin;
 import org.myftp.gattserver.csi.world.relations.tagging.Mother;
 import org.myftp.gattserver.csi.world.relations.tagging.Sister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Boyfriend extends AbstractMoralRelationType {
+public class Boyfriend extends AbstractCoupleRelationType {
 
 	@Autowired
-	private Mother mother;
+	private Husband husband;
 	@Autowired
-	private Sister sister;
-
-	private static final int MAX_AGE_DIFF_RANGE = 5;
-	private static final int MIN_AGE = 15;
+	private Girlfriend girlfriend;
 
 	public Boyfriend() {
 		super("Boyfriend");
 	}
 
 	@Override
-	public double getPropability() {
-		return 0.3;
-	}
+	protected boolean specificApply(Person him, Person her) {
+		Person holdingPerson = him;
+		Person targetPerson = her;
 
-	public boolean apply(Person holdingPerson, Person targetPerson) {
-
-		// Pøítel musí být muž
-		if (holdingPerson.isMale() == false)
+		if (worldKnowledge.isInRelation(holdingPerson, husband))
 			return false;
 
-		// Gayové odpustí - cílová osoba pøítele musí být žena
-		if (targetPerson.isMale())
+		if (worldKnowledge.isInRelation(holdingPerson, this))
 			return false;
 
-		double hPAge = holdingPerson.getAge(world.getYearOffset());
-		double tPAge = targetPerson.getAge(world.getYearOffset());
-		
-		// minimální vìk k párování
-		if (hPAge < MIN_AGE)
-			return false;
-		if (tPAge < MIN_AGE)
-			return false;
-		
-		// vìkové rozdíly
-		if (Math.abs(hPAge - tPAge) > MAX_AGE_DIFF_RANGE)
-			return false;
-
-		// Nemùže chodit se svojí sestrou, matkou (ani její matkou nebo sestrou
-		// apod.) a nesmí být ženatý
-		IRelationType[] bannedFirstLevelRelations = new IRelationType[] {
-				sister, mother };
-		IRelationType[] bannedDeepLevelsRelations = bannedFirstLevelRelations;
-		if (checkRecursivelyBannedRelations(holdingPerson, targetPerson,
-				bannedFirstLevelRelations, bannedDeepLevelsRelations, true) == false)
+		if (worldKnowledge.checkBannedRelations(holdingPerson, targetPerson,
+				Sister.getInstance(), Mother.getInstance(),
+				Cousin.getInstance(), Aunt.getInstance()) == false)
 			return false;
 
 		holdingPerson.getKnowledge().registerRelation(this, holdingPerson,
 				targetPerson);
 		targetPerson.getKnowledge().registerRelation(this, holdingPerson,
 				targetPerson);
+
+		// navíc zapiš opaèný vztah
+		holdingPerson.getKnowledge().registerRelation(girlfriend, targetPerson,
+				holdingPerson);
+		targetPerson.getKnowledge().registerRelation(girlfriend, targetPerson,
+				holdingPerson);
+		worldKnowledge.registerRelation(girlfriend, targetPerson, holdingPerson);
+
 		return true;
 	}
 }
