@@ -16,6 +16,8 @@ public class World {
 	private double minimumAge = Double.MAX_VALUE;
 	private double maximumAge = 0;
 
+	private int yearOffset;
+
 	private Knowledge knowledge;
 
 	private double sumOfAges;
@@ -53,6 +55,18 @@ public class World {
 	/**
 	 * Gettery
 	 */
+
+	public Set<Person> getPersons() {
+		return knowledge.getPersons();
+	}
+
+	public int getYearOffset() {
+		return yearOffset;
+	}
+
+	public void setYearOffset(int yearOffset) {
+		this.yearOffset = yearOffset;
+	}
 
 	public Map<Person, Set<Person>> getPersonsByRelations(IRelationType type) {
 		return knowledge.getRelationsByRelation().get(type);

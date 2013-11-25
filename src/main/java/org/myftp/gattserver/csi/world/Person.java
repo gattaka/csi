@@ -83,9 +83,14 @@ public class Person {
 	}
 
 	public double getAge() {
+		return getAge(0);
+	}
+
+	public double getAge(int yearOffset) {
 		LocalDate date = LocalDate.now();
 		LocalDate birthDate = LocalDate.fromDateFields(this.birthDate);
-		double age = Months.monthsBetween(birthDate, date).getMonths() / 12.0;
+		double age = Months.monthsBetween(birthDate, date).getMonths() / 12.0
+				- yearOffset * 12;
 		return age;
 	}
 

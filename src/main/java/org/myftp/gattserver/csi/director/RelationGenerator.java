@@ -1,6 +1,7 @@
 package org.myftp.gattserver.csi.director;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,14 @@ import org.myftp.gattserver.csi.world.Immorality;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.World;
 import org.myftp.gattserver.csi.world.relations.IRelationType;
+import org.myftp.gattserver.csi.world.relations.moral.Boyfriend;
+import org.myftp.gattserver.csi.world.relations.moral.Girlfriend;
+import org.myftp.gattserver.csi.world.relations.moral.Husband;
+import org.myftp.gattserver.csi.world.relations.moral.Wife;
+import org.myftp.gattserver.csi.world.relations.tagging.Brother;
+import org.myftp.gattserver.csi.world.relations.tagging.Father;
+import org.myftp.gattserver.csi.world.relations.tagging.Mother;
+import org.myftp.gattserver.csi.world.relations.tagging.Sister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +39,23 @@ public class RelationGenerator {
 
 	@Autowired
 	private World world;
+
+	@Autowired
+	private Girlfriend girlfriend;
+	@Autowired
+	private Boyfriend boyfriend;
+	@Autowired
+	private Husband husband;
+	@Autowired
+	private Wife wife;
+	@Autowired
+	private Mother mother;
+	@Autowired
+	private Father father;
+	@Autowired
+	private Brother brother;
+	@Autowired
+	private Sister sister;
 
 	@PostConstruct
 	public void init() {
@@ -51,10 +77,13 @@ public class RelationGenerator {
 	 * 
 	 * @param holdingPerson
 	 * @param persons
+	 * @param allowedRelations
 	 */
-	public void generateRelations(Person holdingPerson, List<Person> persons) {
+	public void generateRelations(Person holdingPerson, List<Person> persons,
+			IRelationType... allowedRelations) {
 
-		List<IRelationType> relationTypes = iRelationTypes;
+		List<IRelationType> relationTypes = allowedRelations.length == 0 ? iRelationTypes
+				: Arrays.asList(allowedRelations);
 		for (IRelationType relationType : relationTypes) {
 
 			Random random = new Random();
@@ -82,5 +111,10 @@ public class RelationGenerator {
 			}
 		}
 
+	}
+
+	public void generateCoupleRelations(Person holdingPerson,
+			List<Person> persons) {
+		generateRelations(holdingPerson, persons, girlfriend, boyfriend);
 	}
 }

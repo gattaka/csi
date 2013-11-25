@@ -11,6 +11,11 @@ public class Girlfriend extends AbstractMoralRelationType {
 		super("Girlfriend");
 	}
 
+	@Override
+	public double getPropability() {
+		return 0.3;
+	}
+	
 	public boolean apply(Person holdingPerson, Person targetPerson) {
 		// TODO Auto-generated method stub
 		return true;

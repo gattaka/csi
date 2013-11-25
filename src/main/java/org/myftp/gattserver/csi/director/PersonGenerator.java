@@ -13,20 +13,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class PersonGenerator {
 
-	private static final int MAX_AGE = 90;
-	private static final int MIN_AGE = 15;
+	public Person generatePerson(int age, int yearOffset) {
+		return generatePerson(age, age, yearOffset);
+	}
 
-	public Person generatePerson() {
-
-		Random random = new Random();
+	public Person generatePerson(int maxAge, int minAge, int yearOffset) {
 
 		Person person = new Person();
 
 		person.setAddress(Address.generateRandomAddress());
 
 		Calendar calendar = Calendar.getInstance();
-		int year = Calendar.getInstance().get(Calendar.YEAR)
-				- random.nextInt(MAX_AGE - MIN_AGE) - MIN_AGE;
+		Random random = new Random();
+		int ageRandom = maxAge == minAge ? 0 : random.nextInt(maxAge - minAge);
+		int year = Calendar.getInstance().get(Calendar.YEAR) - ageRandom
+				- minAge - yearOffset;
 		calendar.set(year, random.nextInt(12) + 1, random.nextInt(28) + 1);
 		person.setBirthDate(calendar.getTime());
 
