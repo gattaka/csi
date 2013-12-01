@@ -3,8 +3,7 @@ package org.myftp.gattserver.csi.world.relations.moral;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
 
-public abstract class AbstractCoupleRelationType extends
-		AbstractMoralRelationType {
+public abstract class AbstractCoupleRelationType extends AbstractMoralRelationType {
 
 	private static final int MAX_AGE_DIFF_RANGE = 5;
 	private static final int MIN_AGE = 15;
@@ -18,18 +17,15 @@ public abstract class AbstractCoupleRelationType extends
 		return 0.3;
 	}
 
-	public boolean apply(Person him, Person her) {
+	public boolean apply(Person holdingPerson, Person targetPerson) {
 
-		// Pøítel musí být muž
-		if (him.isMale() == false)
+		// Pohlaví se musí lišit (homosexuální vztahy zatím nevedeme, neøešit
+		// dojde na nì ... na každého jednou dojde)
+		if (holdingPerson.isMale() == targetPerson.isMale())
 			return false;
 
-		// Gayové odpustí - cílová osoba pøítele musí být žena
-		if (her.isMale())
-			return false;
-
-		double hPAge = him.getAge(world.getYearOffset());
-		double tPAge = her.getAge(world.getYearOffset());
+		double hPAge = holdingPerson.getAge(world.getYearOffset());
+		double tPAge = targetPerson.getAge(world.getYearOffset());
 
 		// minimální vìk k párování
 		if (hPAge < MIN_AGE)
@@ -41,13 +37,13 @@ public abstract class AbstractCoupleRelationType extends
 		if (Math.abs(hPAge - tPAge) > MAX_AGE_DIFF_RANGE)
 			return false;
 
-		if (specificApply(him, her) == false)
+		if (specificApply(holdingPerson, targetPerson) == false)
 			return false;
 
-		him.getKnowledge().registerRelation(this, him, her);
-		her.getKnowledge().registerRelation(this, him, her);
+		holdingPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
+		targetPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
 		return true;
 	}
 
-	protected abstract boolean specificApply(Person him, Person her);
+	protected abstract boolean specificApply(Person holdingPerson, Person targetPerson);
 }

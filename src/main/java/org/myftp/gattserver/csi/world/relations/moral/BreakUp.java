@@ -1,18 +1,20 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
-import org.myftp.gattserver.csi.world.Knowledge;
 import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.relations.AbstractMoralRelationType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BreakUp extends AbstractMoralRelationType {
+public class BreakUp extends AbstractCoupleRelationType {
 
 	@Autowired
 	private Girlfriend girlfriend;
 	@Autowired
 	private Boyfriend boyfriend;
+	@Autowired
+	private Husband husband;
+	@Autowired
+	private Wife wife;
 
 	public BreakUp() {
 		super("BreakUp");
@@ -23,49 +25,33 @@ public class BreakUp extends AbstractMoralRelationType {
 		return 0.5;
 	}
 
-	public boolean apply(Person holdingPerson, Person targetPerson) {
+	protected boolean specificApply(Person holdingPerson, Person targetPerson) {
 
+		// nemùžou být zároveò rozešlí když spolu chodí/jsou manželé
 		if (holdingPerson.isMale()) {
-			if (targetPerson.isMale() == false) {
-				if (worldKnowledge.isInRelation(holdingPerson, boyfriend,
-						targetPerson) == false)
-					return false;
-			} else {
+			if (worldKnowledge.isInRelation(holdingPerson, boyfriend, targetPerson))
 				return false;
-			}
-
+			if (worldKnowledge.isInRelation(holdingPerson, husband, targetPerson))
+				return false;
+			if (Boyfriend.checkFamily(holdingPerson, targetPerson, worldKnowledge) == false)
+				return false;
 		} else {
-			if (targetPerson.isMale()) {
-				if (worldKnowledge.isInRelation(holdingPerson, girlfriend,
-						targetPerson) == false)
-					return false;
-			} else {
+			if (worldKnowledge.isInRelation(holdingPerson, girlfriend, targetPerson))
 				return false;
-			}
+			if (worldKnowledge.isInRelation(holdingPerson, wife, targetPerson))
+				return false;
+			if (Girlfriend.checkFamily(holdingPerson, targetPerson, worldKnowledge) == false)
+				return false;
 		}
 
-		holdingPerson.getKnowledge().registerRelation(this, holdingPerson,
-				targetPerson);
-		targetPerson.getKnowledge().registerRelation(this, holdingPerson,
-				targetPerson);
+		holdingPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
+		targetPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
+		// worldKnowledge zapíše parent-class
 
 		// navíc zapiš opaèný vztah
-		holdingPerson.getKnowledge().registerRelation(this, targetPerson,
-				holdingPerson);
-		targetPerson.getKnowledge().registerRelation(this, targetPerson,
-				holdingPerson);
+		holdingPerson.getKnowledge().registerRelation(this, targetPerson, holdingPerson);
+		targetPerson.getKnowledge().registerRelation(this, targetPerson, holdingPerson);
 		worldKnowledge.registerRelation(this, targetPerson, holdingPerson);
-
-		// navíc zruš vztah boyfriend, girlfriend u obou úèastníkù +
-		// worldKnowledge
-
-		Knowledge[] knowledges = new Knowledge[] {
-				holdingPerson.getKnowledge(), targetPerson.getKnowledge(),
-				worldKnowledge };
-		for (Knowledge knowledge : knowledges) {
-			knowledge.removeRelation(boyfriend, holdingPerson, targetPerson);
-			knowledge.removeRelation(girlfriend, targetPerson, holdingPerson);
-		}
 
 		return true;
 	}

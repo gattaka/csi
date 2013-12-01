@@ -13,14 +13,6 @@ import org.myftp.gattserver.csi.world.Immorality;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.World;
 import org.myftp.gattserver.csi.world.relations.IRelationType;
-import org.myftp.gattserver.csi.world.relations.moral.Boyfriend;
-import org.myftp.gattserver.csi.world.relations.moral.Girlfriend;
-import org.myftp.gattserver.csi.world.relations.moral.Husband;
-import org.myftp.gattserver.csi.world.relations.moral.Wife;
-import org.myftp.gattserver.csi.world.relations.tagging.Brother;
-import org.myftp.gattserver.csi.world.relations.tagging.Father;
-import org.myftp.gattserver.csi.world.relations.tagging.Mother;
-import org.myftp.gattserver.csi.world.relations.tagging.Sister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RelationGenerator {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(RelationGenerator.class);
+	private static Logger logger = LoggerFactory.getLogger(RelationGenerator.class);
 
 	private Map<Immorality, List<IRelationType>> relationsPalette = new HashMap<Immorality, List<IRelationType>>();
 
@@ -39,23 +30,6 @@ public class RelationGenerator {
 
 	@Autowired
 	private World world;
-
-	@Autowired
-	private Girlfriend girlfriend;
-	@Autowired
-	private Boyfriend boyfriend;
-	@Autowired
-	private Husband husband;
-	@Autowired
-	private Wife wife;
-	@Autowired
-	private Mother mother;
-	@Autowired
-	private Father father;
-	@Autowired
-	private Brother brother;
-	@Autowired
-	private Sister sister;
 
 	@PostConstruct
 	public void init() {
@@ -79,11 +53,10 @@ public class RelationGenerator {
 	 * @param persons
 	 * @param allowedRelations
 	 */
-	public void generateRelations(Person holdingPerson, List<Person> persons,
-			IRelationType... allowedRelations) {
+	public void generateRelations(Person holdingPerson, List<Person> persons, IRelationType... allowedRelations) {
 
-		List<IRelationType> relationTypes = allowedRelations.length == 0 ? iRelationTypes
-				: Arrays.asList(allowedRelations);
+		List<IRelationType> relationTypes = allowedRelations.length == 0 ? iRelationTypes : Arrays
+				.asList(allowedRelations);
 		for (IRelationType relationType : relationTypes) {
 
 			Random random = new Random();
@@ -91,8 +64,7 @@ public class RelationGenerator {
 
 			// náhodnì vyber cílovou osobu
 			Person targetPerson = null;
-			while (targetPerson == null
-					|| holdingPerson.equals(targetPerson) == true) {
+			while (targetPerson == null || holdingPerson.equals(targetPerson) == true) {
 				targetPerson = persons.get(random.nextInt(persons.size()));
 			}
 
@@ -100,21 +72,14 @@ public class RelationGenerator {
 			if (hit < relationType.getPropability(holdingPerson, targetPerson)) {
 
 				if (relationType.applyRelation(holdingPerson, targetPerson)) {
-					logger.info(holdingPerson.getFirstName() + " "
-							+ holdingPerson.getSureName() + " --> "
-							+ relationType.getName() + " --> "
-							+ targetPerson.getFirstName() + " "
+					logger.info(holdingPerson.getFirstName() + " " + holdingPerson.getSureName() + " --> "
+							+ relationType.getName() + " --> " + targetPerson.getFirstName() + " "
 							+ targetPerson.getSureName());
-					world.registerRelation(relationType, holdingPerson,
-							targetPerson);
+					world.registerRelation(relationType, holdingPerson, targetPerson);
 				}
 			}
 		}
 
 	}
 
-	public void generateCoupleRelations(Person holdingPerson,
-			List<Person> persons) {
-		generateRelations(holdingPerson, persons, girlfriend, boyfriend);
-	}
 }

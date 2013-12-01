@@ -27,30 +27,8 @@ public class WorldGenerator {
 	private static final int MAX_BASE_POPULATION = 50;
 	private static final int MIN_BASE_POPULATION = 20;
 
-	/**
-	 * Vìk poèáteèní populace
-	 */
-	private static final int BASE_POPULATION_START_AGE = 7;
-
-	/**
-	 * Maximální poèet pøíchozích do mìsta - jde o osoby, které zpestøují
-	 * populaci mìsta, aby v nìm nebyly pouze dìti poèáteèní populace - jejich
-	 * vìk se nekontroluje, jediná podmínka je, že nesmí jít o dítì (to by do
-	 * mìsta samo nepøišlo)
-	 */
-	private static final int MAX_INCOMERS_BY_YEAR = 10;
-
-	/**
-	 * Maximální a minimální vìk pøíchozích lidí
-	 */
-	private static final int MAX_INCOMER_AGE = 60;
-	private static final int MIN_INCOMER_AGE = 20;
-
-	/**
-	 * Kolik let historie mìsta bude nasimulováno, než pøijde souèasnost a
-	 * pøípad s vraždou
-	 */
-	private static final int YEARS_OF_PROJECTION = 60;
+	private static final int MAX_BASE_AGE = 60;
+	private static final int MIN_BASE_AGE = 18;
 
 	@Autowired
 	private PersonGenerator personGenerator;
@@ -61,47 +39,26 @@ public class WorldGenerator {
 	@Autowired
 	private World world;
 
-	private static Logger logger = LoggerFactory
-			.getLogger(WorldGenerator.class);
+	private static Logger logger = LoggerFactory.getLogger(WorldGenerator.class);
 
 	public Knowledge generateWorldKnowledge() {
 
 		Random random = new Random();
 
-		// I. vygeneruj základ populace (dìti)
-		int basePopulation = random.nextInt(MAX_BASE_POPULATION
-				- MIN_BASE_POPULATION)
-				+ MIN_BASE_POPULATION;
+		// I. vygeneruj základ populace
+		int basePopulation = random.nextInt(MAX_BASE_POPULATION - MIN_BASE_POPULATION) + MIN_BASE_POPULATION;
 		List<Person> persons = new ArrayList<>(world.getPersons());
 
 		for (int i = 0; i < basePopulation; i++) {
-			Person person = personGenerator.generatePerson(
-					BASE_POPULATION_START_AGE, YEARS_OF_PROJECTION);
+			Person person = personGenerator.generatePerson(MAX_BASE_AGE, MIN_BASE_AGE, 0);
 			logger.info("New character (BASE): " + person.toString());
 			world.registerPerson(person);
 		}
 
-		// II. Simuluj historii mìsta
-		for (int yearOffset = YEARS_OF_PROJECTION; yearOffset >= 0; yearOffset--) {
-
-			world.setYearOffset(yearOffset);
-
-			// vygeneruj pro tento rok pøistìhovalce
-			int thisYearIncomers = random.nextInt(MAX_INCOMERS_BY_YEAR);
-			for (int i = 0; i < thisYearIncomers; i++) {
-				Person person = personGenerator.generatePerson(MAX_INCOMER_AGE,
-						MIN_INCOMER_AGE, YEARS_OF_PROJECTION);
-				logger.info("New character (INCOMER): " + person.toString());
-				world.registerPerson(person);
-			}
-
-			// vztahy
-			persons = new ArrayList<>(world.getPersons());
-			for (Person holdingPerson : persons) {
-				relationGenerator.generateCoupleRelations(holdingPerson,
-						persons);
-			}
-
+		// II. vztahy
+		persons = new ArrayList<>(world.getPersons());
+		for (Person holdingPerson : persons) {
+			relationGenerator.generateRelations(holdingPerson, persons);
 		}
 
 		// II. vygeneruj vztahy

@@ -1,5 +1,6 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
+import org.myftp.gattserver.csi.world.Knowledge;
 import org.myftp.gattserver.csi.world.Person;
 import org.myftp.gattserver.csi.world.relations.tagging.Brother;
 import org.myftp.gattserver.csi.world.relations.tagging.Cousin;
@@ -20,6 +21,11 @@ public class Girlfriend extends AbstractCoupleRelationType {
 		super("Girlfriend");
 	}
 
+	public static boolean checkFamily(Person holdingPerson, Person targetPerson, Knowledge worldKnowledge) {
+		return worldKnowledge.checkBannedRelations(holdingPerson, targetPerson, Brother.getInstance(),
+				Father.getInstance(), Cousin.getInstance(), Uncle.getInstance());
+	}
+
 	@Override
 	protected boolean specificApply(Person him, Person her) {
 		Person holdingPerson = her;
@@ -31,21 +37,16 @@ public class Girlfriend extends AbstractCoupleRelationType {
 		if (worldKnowledge.isInRelation(holdingPerson, this))
 			return false;
 
-		if (worldKnowledge.checkBannedRelations(holdingPerson, targetPerson,
-				Brother.getInstance(), Father.getInstance(),
-				Cousin.getInstance(), Uncle.getInstance()) == false)
+		if (checkFamily(holdingPerson, targetPerson, worldKnowledge) == false)
 			return false;
 
-		holdingPerson.getKnowledge().registerRelation(this, holdingPerson,
-				targetPerson);
-		targetPerson.getKnowledge().registerRelation(this, holdingPerson,
-				targetPerson);
+		holdingPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
+		targetPerson.getKnowledge().registerRelation(this, holdingPerson, targetPerson);
+		// worldKnowledge zapíše parent-class
 
 		// navíc zapiš opaèný vztah
-		holdingPerson.getKnowledge().registerRelation(boyfriend, targetPerson,
-				holdingPerson);
-		targetPerson.getKnowledge().registerRelation(boyfriend, targetPerson,
-				holdingPerson);
+		holdingPerson.getKnowledge().registerRelation(boyfriend, targetPerson, holdingPerson);
+		targetPerson.getKnowledge().registerRelation(boyfriend, targetPerson, holdingPerson);
 		worldKnowledge.registerRelation(boyfriend, targetPerson, holdingPerson);
 
 		return true;
