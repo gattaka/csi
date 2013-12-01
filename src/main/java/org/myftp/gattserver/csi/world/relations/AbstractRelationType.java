@@ -35,9 +35,8 @@ public abstract class AbstractRelationType implements IRelationType {
 	public boolean applyRelation(Person holdingPerson, Person targetPerson) {
 
 		// test existence daného vztahu
-		Map<Person, Set<Person>> relations = world.getKnowledge()
-				.getRelationsByRelation().get(this);
-		if (relations != null
+		Map<Person, Set<Person>> relations = world.getKnowledge().getRelationsByRelation().get(this);
+		if (relations != null && relations.get(targetPerson) != null
 				&& relations.get(targetPerson).equals(holdingPerson))
 			return false;
 

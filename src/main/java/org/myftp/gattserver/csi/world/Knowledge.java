@@ -28,7 +28,7 @@ public class Knowledge {
 			Person holdingPerson, IRelationType relation) {
 		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
 				.get(holdingPerson);
-		if (relation == null)
+		if (relations == null)
 			return null; // tato osoba nemá s nikým žádné vztahy
 		return relations.get(relation);
 	}
@@ -37,7 +37,7 @@ public class Knowledge {
 			Person targetPerson) {
 		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
 				.get(holdingPerson);
-		if (relation == null)
+		if (relations == null)
 			return false;
 		Set<Person> persons = relations.get(relation);
 		if (persons == null)
@@ -48,7 +48,7 @@ public class Knowledge {
 	public boolean isInRelation(Person holdingPerson, IRelationType relation) {
 		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
 				.get(holdingPerson);
-		if (relation == null)
+		if (relations == null)
 			return false;
 		Set<Person> persons = relations.get(relation);
 		return persons != null;

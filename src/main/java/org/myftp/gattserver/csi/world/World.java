@@ -18,7 +18,7 @@ public class World {
 
 	private int yearOffset;
 
-	private Knowledge knowledge;
+	private Knowledge knowledge = new Knowledge();
 
 	private double sumOfAges;
 
@@ -50,6 +50,7 @@ public class World {
 			minimumAge = age;
 
 		averageAge = sumOfAges / population;
+		knowledge.getPersons().add(person);
 	}
 
 	/**

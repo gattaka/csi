@@ -51,7 +51,7 @@ public class WorldGenerator {
 
 		for (int i = 0; i < basePopulation; i++) {
 			Person person = personGenerator.generatePerson(MAX_BASE_AGE, MIN_BASE_AGE, 0);
-			logger.info("New character (BASE): " + person.toString());
+			logger.info("New character: " + person.toString());
 			world.registerPerson(person);
 		}
 
