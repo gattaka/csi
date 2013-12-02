@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.myftp.gattserver.csi.director.WorldGenerator;
+import org.myftp.gattserver.csi.graph.GraphExport;
 import org.myftp.gattserver.csi.world.Knowledge;
 import org.myftp.gattserver.csi.world.World;
 import org.myftp.gattserver.csi.world.relations.IRelationType;
@@ -28,23 +29,22 @@ public class Main {
 
 		NumberFormat numberFormat = new DecimalFormat("###.##");
 		logger.info("World population: " + world.getPopulation());
-		logger.info("World AVG age: "
-				+ numberFormat.format(world.getAverageAge()));
-		logger.info("World MAX age: "
-				+ numberFormat.format(world.getMaximumAge()));
-		logger.info("World MIN age: "
-				+ numberFormat.format(world.getMinimumAge()));
+		logger.info("World AVG age: " + numberFormat.format(world.getAverageAge()));
+		logger.info("World MAX age: " + numberFormat.format(world.getMaximumAge()));
+		logger.info("World MIN age: " + numberFormat.format(world.getMinimumAge()));
 		logger.info("World males: " + world.getNumberOfMales());
 		logger.info("World females: " + world.getNumberOfFemales());
 		logger.info("World M/F ratio: "
-				+ numberFormat.format(world.getNumberOfMales() * 1.0
-						/ world.getNumberOfFemales()));
+				+ numberFormat.format(world.getNumberOfMales() * 1.0 / world.getNumberOfFemales()));
 
 		for (IRelationType type : world.getRelationTypes()) {
-			logger.info("Number of relations of type '" + type.getName()
-					+ "': " + world.getPersonsByRelations(type).size());
-
+			logger.info("Number of relations of type '" + type.getName() + "': "
+					+ world.getPersonsByRelations(type).size());
 		}
 
+		String graph = GraphExport.graphExport(knowledge);
+		logger.info(graph);
+
 	}
+
 }

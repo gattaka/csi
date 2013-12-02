@@ -24,8 +24,8 @@ public class WorldGenerator {
 	 * Dìti jsou limitovány vìkem, všechny dìti jsou generovány jako osoby s
 	 * minimálním školním vìkem (v intervalu).
 	 */
-	private static final int MAX_BASE_POPULATION = 50;
-	private static final int MIN_BASE_POPULATION = 20;
+	private static final int MAX_BASE_POPULATION = 10;
+	private static final int MIN_BASE_POPULATION = 5;
 
 	private static final int MAX_BASE_AGE = 60;
 	private static final int MIN_BASE_AGE = 18;

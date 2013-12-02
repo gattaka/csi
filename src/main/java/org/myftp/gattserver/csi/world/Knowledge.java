@@ -24,19 +24,15 @@ public class Knowledge {
 		return relationsByRelation;
 	}
 
-	public Set<Person> getTargetPersonsByHoldingPersonAndRelation(
-			Person holdingPerson, IRelationType relation) {
-		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
-				.get(holdingPerson);
+	public Set<Person> getRelated(Person holdingPerson, IRelationType relation) {
+		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson.get(holdingPerson);
 		if (relations == null)
 			return null; // tato osoba nemá s nikým žádné vztahy
 		return relations.get(relation);
 	}
 
-	public boolean isInRelation(Person holdingPerson, IRelationType relation,
-			Person targetPerson) {
-		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
-				.get(holdingPerson);
+	public boolean isInRelation(Person holdingPerson, IRelationType relation, Person targetPerson) {
+		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson.get(holdingPerson);
 		if (relations == null)
 			return false;
 		Set<Person> persons = relations.get(relation);
@@ -46,20 +42,17 @@ public class Knowledge {
 	}
 
 	public boolean isInRelation(Person holdingPerson, IRelationType relation) {
-		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
-				.get(holdingPerson);
+		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson.get(holdingPerson);
 		if (relations == null)
 			return false;
 		Set<Person> persons = relations.get(relation);
 		return persons != null;
 	}
 
-	public boolean checkBannedRelations(Person holdingPerson,
-			Person targetPerson, IRelationType... bannedRelations) {
+	public boolean checkBannedRelations(Person holdingPerson, Person targetPerson, IRelationType... bannedRelations) {
 
 		for (IRelationType bannedRelation : bannedRelations) {
-			Set<Person> persons = getTargetPersonsByHoldingPersonAndRelation(
-					holdingPerson, bannedRelation);
+			Set<Person> persons = getRelated(holdingPerson, bannedRelation);
 			if (persons != null) {
 				if (persons.contains(targetPerson))
 					return false;
@@ -68,22 +61,19 @@ public class Knowledge {
 		return true;
 	}
 
-	public boolean checkRecursivelyBannedRelations(Person holdingPerson,
-			Person targetPerson, IRelationType firstLevelRelations[],
-			IRelationType deepLevelsRelations[], boolean firstLevel) {
+	public boolean checkRecursivelyBannedRelations(Person holdingPerson, Person targetPerson,
+			IRelationType firstLevelRelations[], IRelationType deepLevelsRelations[], boolean firstLevel) {
 
-		IRelationType bannedRelations[] = firstLevel ? firstLevelRelations
-				: deepLevelsRelations;
+		IRelationType bannedRelations[] = firstLevel ? firstLevelRelations : deepLevelsRelations;
 
 		for (IRelationType bannedRelation : bannedRelations) {
-			Set<Person> persons = getTargetPersonsByHoldingPersonAndRelation(
-					holdingPerson, bannedRelation);
+			Set<Person> persons = getRelated(holdingPerson, bannedRelation);
 			if (persons != null) {
 				if (persons.contains(targetPerson))
 					return false;
 				for (Person p : persons) {
-					if (checkRecursivelyBannedRelations(p, targetPerson,
-							firstLevelRelations, deepLevelsRelations, false) == false)
+					if (checkRecursivelyBannedRelations(p, targetPerson, firstLevelRelations, deepLevelsRelations,
+							false) == false)
 						return false;
 				}
 			}
@@ -92,16 +82,13 @@ public class Knowledge {
 		return true;
 	}
 
-	public void registerRelation(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
+	public void registerRelation(IRelationType relationType, Person holdingPerson, Person targetPerson) {
 		registerRelationByRelation(relationType, holdingPerson, targetPerson);
-		registerRelationByHoldingPerson(relationType, holdingPerson,
-				targetPerson);
+		registerRelationByHoldingPerson(relationType, holdingPerson, targetPerson);
 	}
 
 	// TODO test
-	public void removeRelation(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
+	public void removeRelation(IRelationType relationType, Person holdingPerson, Person targetPerson) {
 		removeRelationByRelation(relationType, holdingPerson, targetPerson);
 		removeRelationByHoldingPerson(relationType, holdingPerson, targetPerson);
 	}
@@ -115,10 +102,8 @@ public class Knowledge {
 	}
 
 	// TODO test
-	private void removeRelationByRelation(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<Person, Set<Person>> relations = relationsByRelation
-				.get(relationType);
+	private void removeRelationByRelation(IRelationType relationType, Person holdingPerson, Person targetPerson) {
+		Map<Person, Set<Person>> relations = relationsByRelation.get(relationType);
 		if (relations == null)
 			removeRelationError();
 		Set<Person> targetPersons = relations.get(holdingPerson);
@@ -131,10 +116,8 @@ public class Knowledge {
 	}
 
 	// TODO test
-	private void removeRelationByHoldingPerson(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
-				.get(holdingPerson);
+	private void removeRelationByHoldingPerson(IRelationType relationType, Person holdingPerson, Person targetPerson) {
+		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson.get(holdingPerson);
 		if (relations == null)
 			removeRelationError();
 		Set<Person> targetPersons = relations.get(relationType);
@@ -146,10 +129,8 @@ public class Knowledge {
 			relations.remove(relationType);
 	}
 
-	private void registerRelationByRelation(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<Person, Set<Person>> relations = relationsByRelation
-				.get(relationType);
+	private void registerRelationByRelation(IRelationType relationType, Person holdingPerson, Person targetPerson) {
+		Map<Person, Set<Person>> relations = relationsByRelation.get(relationType);
 		if (relations == null) {
 			relations = new HashMap<Person, Set<Person>>();
 			relationsByRelation.put(relationType, relations);
@@ -162,10 +143,8 @@ public class Knowledge {
 		targetPersons.add(targetPerson);
 	}
 
-	private void registerRelationByHoldingPerson(IRelationType relationType,
-			Person holdingPerson, Person targetPerson) {
-		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson
-				.get(holdingPerson);
+	private void registerRelationByHoldingPerson(IRelationType relationType, Person holdingPerson, Person targetPerson) {
+		Map<IRelationType, Set<Person>> relations = relationsByHoldingPerson.get(holdingPerson);
 		if (relations == null) {
 			relations = new HashMap<IRelationType, Set<Person>>();
 			relationsByHoldingPerson.put(holdingPerson, relations);

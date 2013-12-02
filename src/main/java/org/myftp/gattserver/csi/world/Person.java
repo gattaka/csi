@@ -89,8 +89,7 @@ public class Person {
 	public double getAge(int yearOffset) {
 		LocalDate date = LocalDate.now();
 		LocalDate birthDate = LocalDate.fromDateFields(this.birthDate);
-		double age = Months.monthsBetween(birthDate, date).getMonths() / 12.0
-				- yearOffset * 12;
+		double age = Months.monthsBetween(birthDate, date).getMonths() / 12.0 - yearOffset * 12;
 		return age;
 	}
 
@@ -111,11 +110,9 @@ public class Person {
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("d.M.yyyy");
 		NumberFormat numberFormat = new DecimalFormat("###.##");
-		return "I am " + firstName + " " + sureName + " from " + address + " ("
-				+ (male ? "male" : "female") + "), born on "
-				+ dateFormat.format(birthDate) + " (age "
-				+ numberFormat.format(getAge()) + ") - my fingerprint is "
-				+ getFingerprint();
+		return "I am " + firstName + " " + sureName + " from " + address + " (" + (male ? "male" : "female")
+				+ "), born on " + dateFormat.format(birthDate) + " (age " + numberFormat.format(getAge())
+				+ ") - my fingerprint is " + getFingerprint();
 	}
 
 }

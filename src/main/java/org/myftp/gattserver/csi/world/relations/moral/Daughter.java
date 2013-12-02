@@ -1,19 +1,25 @@
 package org.myftp.gattserver.csi.world.relations.moral;
 
-import org.myftp.gattserver.csi.world.Person;
-import org.myftp.gattserver.csi.world.relations.AbstractFamilyRelationType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Daughter extends AbstractFamilyRelationType {
+public class Daughter extends AbstractChild {
+
+	@Autowired
+	private Wife wifeRelation;
+
+	@Autowired
+	private Husband husbandRelation;
+
+	@Autowired
+	private Son sonRelation;
+
+	@Autowired
+	private Daughter daughterRelation;
 
 	public Daughter() {
 		super("Daughter");
-	}
-
-	public boolean apply(Person holdingPerson, Person targetPerson) {
-		// TODO Auto-generated method stub
-		return true;
 	}
 
 }

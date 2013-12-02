@@ -40,10 +40,7 @@ public abstract class AbstractRelationType implements IRelationType {
 				&& relations.get(targetPerson).equals(holdingPerson))
 			return false;
 
-		boolean result = apply(holdingPerson, targetPerson);
-		if (result)
-			worldKnowledge.registerRelation(this, holdingPerson, targetPerson);
-		return result;
+		return apply(holdingPerson, targetPerson);
 	}
 
 	public String getName() {
